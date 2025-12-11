@@ -16,19 +16,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export function StepOne() {
+export function StepTwo() {
   const formSchema = z?.object({
-    Firstname: z
+    Email: z
       .string()
       .min(2, "Must have more than 2 characters")
       .max(10, "Must have less than 10 characters")
       .regex(/^[a-zA-Z]+$/, "Can't contain special characters and numbers"),
-    Lastname: z
+    Phonenumber: z
       .string()
       .min(2, "Must have more than 2 characters")
       .max(10, "Must have less than 10 characters")
       .regex(/^[a-zA-Z]+$/, "Can't contain special characters and numbers"),
-    Username: z
+    Password: z
+      .string()
+      .min(2, "Must have more than 2 characters")
+      .max(10, "Must have less than 10 characters")
+      .trim(),
+    ConfirmPasswordPassword: z
       .string()
       .min(2, "Must have more than 2 characters")
       .max(10, "Must have less than 10 characters")
@@ -37,14 +42,18 @@ export function StepOne() {
 
   type formSchemaType = z.infer<typeof formSchema>;
 
-  const form = useForm<formSchemaType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      Firstname: "",
-      Lastname: "",
-      Username: "",
-    },
-  });
+  const form =
+    useForm <
+    formSchemaType >
+    {
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        Email: "",
+        Phonenumber: "",
+        Password: "",
+        ConfirmPassword: "",
+      },
+    };
 
   const onSubmit = (values: formSchemaType) => {
     console.log(values);
@@ -75,7 +84,7 @@ export function StepOne() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Firstname<span className="text-red-500">*</span>
+                        Email<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Your firstname" {...field} />

@@ -16,7 +16,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export function StepOne() {
+type FormProps = {
+  handleClickNext: () => void;
+};
+
+export const StepOne = (props: FormProps) => {
+  const { handleClickNext } = props;
   const formSchema = z?.object({
     Firstname: z
       .string()
@@ -125,4 +130,4 @@ export function StepOne() {
       </div>
     </div>
   );
-}
+};

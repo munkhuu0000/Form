@@ -1,5 +1,6 @@
 "use client";
 
+import { StepFour } from "@/_component/StepFour";
 import { StepOne } from "@/_component/StepOne";
 import { StepThree } from "@/_component/StepThree";
 import { StepTwo } from "@/_component/StepTwo";
@@ -18,14 +19,22 @@ export default function Home() {
 
   return (
     <div className="bg-zinc-50 w-screen h-screen items-center justify-center flex">
-      {step === 1 && <StepOne handleClicknext={handleClickNext} />}
+      {step === 1 && <StepOne handleClickNext={handleClickNext} />}
       {step === 2 && (
         <StepTwo
           handleClickNext={handleClickNext}
           handleClickBack={handleClickBack}
+          step={step}
         />
       )}
-      {step === 3 && <StepThree handleClickBack={handleClickBack} />}
+      {step === 3 && (
+        <StepThree
+          handleClickNext={handleClickNext}
+          handleClickBack={handleClickBack}
+          step={step}
+        />
+      )}
+      {step === 4 && <StepFour />}
     </div>
   );
 }

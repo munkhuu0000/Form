@@ -52,6 +52,7 @@ export const StepOne = (props: FormProps) => {
   });
 
   const onSubmit = (values: formSchemaType) => {
+    handleClickNext();
     console.log(values);
   };
 

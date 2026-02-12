@@ -16,46 +16,42 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export function StepTwo() {
-  const formSchema = z?.object({
-    Email: z
-      .string()
-      .min(2, "Must have more than 2 characters")
-      .max(10, "Must have less than 10 characters")
-      .regex(/^[a-zA-Z]+$/, "Can't contain special characters and numbers"),
-    Phonenumber: z
-      .string()
-      .min(2, "Must have more than 2 characters")
-      .max(10, "Must have less than 10 characters")
-      .regex(/^[a-zA-Z]+$/, "Can't contain special characters and numbers"),
-    Password: z
-      .string()
-      .min(2, "Must have more than 2 characters")
-      .max(10, "Must have less than 10 characters")
-      .trim(),
-    ConfirmPasswordPassword: z
-      .string()
-      .min(2, "Must have more than 2 characters")
-      .max(10, "Must have less than 10 characters")
-      .trim(),
+const formSchema = z?.object({
+  Email: z.email("Invalid email address"),
+  Phonenumber: z.number().min(8, "Invalid phone number"),
+  Password: z
+    .string()
+    .min(2, "Must have more than 2 characters")
+    .max(10, "Must have less than 10 characters")
+    .trim(),
+  ConfirmPassword: z
+    .string()
+    .min(2, "Must have more than 2 characters")
+    .max(10, "Must have less than 10 characters")
+    .trim(),
+});
+
+type formSchemaType = z.infer<typeof formSchema>;
+type typeOfProps = {
+  step: number;
+  handleClickBack: () => void;
+  handleClickNext: () => void;
+};
+
+export function StepTwo(props: typeOfProps) {
+  const { step, handleClickBack, handleClickNext } = props;
+  const form = useForm<formSchemaType>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      Email: "",
+      Phonenumber: 976,
+      Password: "",
+      ConfirmPassword: "",
+    },
   });
 
-  type formSchemaType = z.infer<typeof formSchema>;
-
-  const form =
-    useForm <
-    formSchemaType >
-    {
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        Email: "",
-        Phonenumber: "",
-        Password: "",
-        ConfirmPassword: "",
-      },
-    };
-
   const onSubmit = (values: formSchemaType) => {
+    handleClickNext();
     console.log(values);
   };
 
@@ -80,14 +76,14 @@ export function StepTwo() {
               >
                 <FormField
                   control={form.control}
-                  name="Firstname"
+                  name="Email"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
                         Email<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Your firstname" {...field} />
+                        <Input placeholder="Your email" {...field} />
                       </FormControl>
                       <FormDescription></FormDescription>
                       <FormMessage />
@@ -96,14 +92,14 @@ export function StepTwo() {
                 />
                 <FormField
                   control={form.control}
-                  name="Lastname"
+                  name="Phonenumber"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Lastname<span className="text-red-500">*</span>
+                        Phonenumber<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Your lastname" {...field} />
+                        <Input placeholder="Your phonenumber" {...field} />
                       </FormControl>
                       <FormDescription></FormDescription>
                       <FormMessage />
@@ -112,21 +108,42 @@ export function StepTwo() {
                 />
                 <FormField
                   control={form.control}
-                  name="Username"
+                  name="Password"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Username<span className="text-red-500">*</span>
+                        Password<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Your username" {...field} />
+                        <Input placeholder="Your password" {...field} />
                       </FormControl>
                       <FormDescription></FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Continue 1/3</Button>
+                <FormField
+                  control={form.control}
+                  name="ConfirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Confirm Password<span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Confirm your password" {...field} />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex flex-row gap-3">
+                  <Button type="button" onClick={handleClickBack}>
+                    Back
+                  </Button>
+                  <Button type="submit">Continue {step}/3</Button>
+                </div>
               </form>
             </Form>
           </div>

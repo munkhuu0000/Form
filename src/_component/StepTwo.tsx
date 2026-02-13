@@ -18,7 +18,10 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z?.object({
   Email: z.email("Invalid email address"),
-  Phonenumber: z.number().min(8, "Invalid phone number"),
+  Phonenumber: z
+    .string()
+    .min(8, "Invalid phone number")
+    .regex(/^[0-9]+$/, "Phone number must contain only digits"),
   Password: z
     .string()
     .min(2, "Must have more than 2 characters")
@@ -44,7 +47,7 @@ export function StepTwo(props: typeOfProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       Email: "",
-      Phonenumber: 976,
+      Phonenumber: "",
       Password: "",
       ConfirmPassword: "",
     },

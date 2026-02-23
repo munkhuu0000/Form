@@ -15,24 +15,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-const formSchema = z?.object({
-  Email: z.email("Invalid email address"),
-  Phonenumber: z
-    .string()
-    .min(8, "Invalid phone number")
-    .regex(/^[0-9]+$/, "Phone number must contain only digits"),
-  Password: z
-    .string()
-    .min(2, "Must have more than 2 characters")
-    .max(10, "Must have less than 10 characters")
-    .trim(),
-  ConfirmPassword: z
-    .string()
-    .min(2, "Must have more than 2 characters")
-    .max(10, "Must have less than 10 characters")
-    .trim(),
-});
+const formSchema = z
+  ?.object({
+    Email: z.email("Invalid email address"),
+    Phonenumber: z.string().regex(/^\+?\d{8}$/, "Invalid phone number."),
+    Password: z
+      .string()
+      .regex(
+        passwordRegex,
+        "Weak password. Use numbers, symbols, lowercase letters and uppercase letters.",
+      ),
+    Confirmpassword: z.string(),
+  })
+  .refine((data) => data.Password === data.Confirmpassword, {
+    message: "Those password did’t match, Try again",
+    path: ["Confirmpassword"],
+  });
 
 type formSchemaType = z.infer<typeof formSchema>;
 type typeOfProps = {
@@ -43,15 +46,19 @@ type typeOfProps = {
 
 export function StepTwo(props: typeOfProps) {
   const { step, handleClickBack, handleClickNext } = props;
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       Email: "",
       Phonenumber: "",
       Password: "",
-      ConfirmPassword: "",
+      Confirmpassword: "",
     },
   });
+  const toggleVisibility = (): void => {
+    setIsVisible((prev) => !prev);
+  };
 
   const onSubmit = (values: formSchemaType) => {
     handleClickNext();
@@ -118,7 +125,21 @@ export function StepTwo(props: typeOfProps) {
                         Password<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Your password" {...field} />
+                        <div className="flex flex-row justify-between relative">
+                          <Input
+                            type={isVisible ? "text" : "password"}
+                            placeholder="Your password"
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={toggleVisibility}
+                            className="absolute right-0"
+                          >
+                            {isVisible ? <Eye /> : <EyeOff />}
+                          </Button>
+                        </div>
                       </FormControl>
                       <FormDescription></FormDescription>
                       <FormMessage />
@@ -127,14 +148,28 @@ export function StepTwo(props: typeOfProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="ConfirmPassword"
+                  name="Confirmpassword"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
                         Confirm Password<span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Confirm your password" {...field} />
+                        <div className="flex flex-row justify-between relative">
+                          <Input
+                            type={isVisible ? "text" : "password"}
+                            placeholder="Confirm your password"
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={toggleVisibility}
+                            className="absolute right-0"
+                          >
+                            {isVisible ? <Eye /> : <EyeOff />}
+                          </Button>
+                        </div>
                       </FormControl>
                       <FormDescription></FormDescription>
                       <FormMessage />

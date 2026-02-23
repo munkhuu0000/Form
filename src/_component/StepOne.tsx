@@ -26,17 +26,17 @@ export const StepOne = (props: FormProps) => {
     Firstname: z
       .string()
       .min(2, "Must have more than 2 characters")
-      .max(10, "Must have less than 10 characters")
+      .max(30, "Must have less than 10 characters")
       .regex(/^[a-zA-Z]+$/, "Can't contain special characters and numbers"),
     Lastname: z
       .string()
       .min(2, "Must have more than 2 characters")
-      .max(10, "Must have less than 10 characters")
+      .max(30, "Must have less than 10 characters")
       .regex(/^[a-zA-Z]+$/, "Can't contain special characters and numbers"),
     Username: z
       .string()
       .min(2, "Must have more than 2 characters")
-      .max(10, "Must have less than 10 characters")
+      .max(15, "Must have less than 10 characters")
       .trim(),
   });
 

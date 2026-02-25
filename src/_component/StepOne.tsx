@@ -15,13 +15,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { data } from "@/app/page";
+import { Dispatch, SetStateAction } from "react";
 
 type FormProps = {
   handleClickNext: () => void;
+  data: data;
+  setData: Dispatch<SetStateAction<data>>;
+  step: number;
 };
 
 export const StepOne = (props: FormProps) => {
-  const { handleClickNext } = props;
+  const { handleClickNext, data, setData, step } = props;
   const formSchema = z?.object({
     Firstname: z
       .string()
@@ -45,13 +50,19 @@ export const StepOne = (props: FormProps) => {
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      Firstname: "",
-      Lastname: "",
-      Username: "",
+      Firstname: data.Firstname,
+      Lastname: data.Lastname,
+      Username: data.Username,
     },
   });
 
   const onSubmit = (values: formSchemaType) => {
+    setData((prev) => ({
+      ...prev,
+      Firstname: values.Firstname,
+      Lastname: values.Lastname,
+      Username: values.Username,
+    }));
     handleClickNext();
     console.log(values);
   };

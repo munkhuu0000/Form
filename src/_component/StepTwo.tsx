@@ -17,6 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { data } from "@/app/page";
+import { Dispatch, SetStateAction } from "react";
+
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -42,18 +45,20 @@ type typeOfProps = {
   step: number;
   handleClickBack: () => void;
   handleClickNext: () => void;
+  data: data;
+  setData: Dispatch<SetStateAction<data>>;
 };
 
 export function StepTwo(props: typeOfProps) {
-  const { step, handleClickBack, handleClickNext } = props;
+  const { step, handleClickBack, handleClickNext, data, setData } = props;
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      Email: "",
-      Phonenumber: "",
-      Password: "",
-      Confirmpassword: "",
+      Email: data.Email,
+      Phonenumber: data.Phonenumber,
+      Password: data.Password,
+      Confirmpassword: data.Confirmpassword,
     },
   });
   const toggleVisibility = (): void => {
@@ -61,6 +66,13 @@ export function StepTwo(props: typeOfProps) {
   };
 
   const onSubmit = (values: formSchemaType) => {
+    setData((prev) => ({
+      ...prev,
+      Email: values.Email,
+      Phonenumber: values.Phonenumber,
+      Password: values.Password,
+      Confirmpassword: values.Confirmpassword,
+    }));
     handleClickNext();
     console.log(values);
   };
